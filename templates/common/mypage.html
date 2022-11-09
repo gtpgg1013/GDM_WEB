@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load pybo_filter %}
+{% block content %}
+<br>
+<div class="row justify-content-center">
+    <div class="col text-center">
+        <h2>{{ user.username }}'s My Page</h2>
+    </div>
+</div>
+  </div>
+  <div class="container my-3">
+  <h4>My Generated Dataset LIST</h4>
+    <table class="table">
+      <thead>
+        <tr class="thead-dark">
+          <th>번호</th>
+          <th>Generated Dataset Name</th>
+          <th>Generated Dataset Description</th>
+          <th>Generated Dataset Image 생성 장수</th>
+          <th>Generated Dataset Classes</th>
+          <th>생성일시</th>
+          <th>Progress</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if my_resultdataset_list %}
+          {% for rds in my_resultdataset_list %}
+            <tr>
+              <td>
+                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                {{my_resultdataset_list.paginator.count|sub:my_resultdataset_list.start_index|sub:forloop.counter0|add:1}}
+              </td>
+              <td>{{ rds.res_dataset_name }}</td>
+              <td>{{ rds.res_dataset_description }}</td>
+              <td>{{ rds.res_dataset_count }}</td>
+              <td>{{ rds.res_dataset_class_list }}</td>
+              <td>{{ rds.create_date }}</td>
+              {% if rds.res_process_finished_YN %}
+                <td><a href="{% url 'gan_dm:download' rds.id %}" class="btn btn-primary">데이터셋 다운로드</a></td>
+              {% else %}
+                <td><a href="#" class="btn btn-secondary">데이터셋 생성중</td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="3">생성한 데이터셋이 없습니다.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+      <!-- 이전페이지 -->
+      {% if my_resultdataset_list.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ my_resultdataset_list.previous_page_number }}">이전</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+      {% endif %}
+      <!-- 페이지리스트 -->
+      {% for page_number in my_resultdataset_list.paginator.page_range %}
+        {% if page_number >= my_resultdataset_list.number|add:-5 and page_number <= my_resultdataset_list.number|add:5 %}
+          {% if page_number == my_resultdataset_list.number %}
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      <!-- 다음페이지 -->
+      {% if my_resultdataset_list.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ my_resultdataset_list.next_page_number }}">다음</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+      {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+  </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h5 class="my-3 border-bottom pb-2">이미지 생성 / 변환</h5>
+    <form method="post" class="post-form my-3">
+      {% csrf_token %}
+      <!-- 오류표시 Start -->
+      {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+          {% for field in form %}
+            {% if field.errors %}
+              <strong>{{ field.label }}</strong>
+              {{ field.errors }}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      <!-- 오류표시 End -->
+      <div class="form-group">
+        <label for="res_dataset_name">Dataset Name</label>
+        <input type="text" class="form-control" name="res_dataset_name" id="res_dataset_name" value="{{ form.res_dataset_name.value|default_if_none:'' }}">
+      </div>
+      <div class="form-group">
+        <label for="res_dataset_description">Dataset Description</label>
+        <textarea class="form-control" name="res_dataset_description" id="res_dataset_description" rows="10">{{ form.res_dataset_description.value|default_if_none:'' }}</textarea>
+      </div>
+            <div class="form-group">
+        <label for="res_dataset_count">Number of Generating Images</label>
+        <input type="text" class="form-control" name="res_dataset_count" id="res_dataset_count" value="{{ form.res_dataset_count.value|default_if_none:'' }}">
+      </div>
+      <label for="res_dataset_class_list">Select class for Image Generation</label>
+      <div class="form-check">
+        <ul>
+          {% for i in class_range %}
+          <li>
+              <input class="form-check-input" type="checkbox" value="{{forloop.counter0}}" id="flexCheckDefault" name="res_dataset_class_list">
+              <label class="form-check-label" for="flexCheckDefault">
+              <strong>{{forloop.counter0}}</strong>
+              </label>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <button type="submit" class="btn btn-primary">저장하기</button>
+    </form>
+  </div>
+{% endblock %}
