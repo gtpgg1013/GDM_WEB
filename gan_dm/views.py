@@ -54,6 +54,7 @@ def inference(request, gen_model_id):
             result_dataset.author = request.user  # 추가한 속성 author 적용
             result_dataset.create_date = timezone.now()
             result_dataset.res_dataset_class_list = list_item
+
             '''
             여기에서 뭔가 다른 서비스에서 추론하는 로직이 껴있어야 하지 않을까?
             async api를 찌르고, 일단 200 리턴 받음.
@@ -64,7 +65,27 @@ def inference(request, gen_model_id):
             result_dataset.save()
             print(result_dataset.id)
             rds_id = result_dataset.id
-            tmp = requests.get('http://127.0.0.1:8001/inference/{}/'.format(rds_id))
+            '''
+            body에
+            inference 장수
+            class 뭐뭐
+            가중치 path 전달해야 함
+            알고리즘
+            '''
+
+            print(type(list_item))
+
+            post_data = dict()
+            post_data['rds_id'] = rds_id
+            post_data['target_data_num'] = result_dataset.res_dataset_count
+            post_data['target_class_list'] = list_item
+            post_data['model_weight_path'] = gen_model.model_path
+            post_data['algorithm'] = gen_model.algorithm.al_name
+            '''
+            변환 모델인 경우 if문 걸고 image list도 같이 전송하면 됨
+            '''
+            print(post_data)
+            tmp = requests.post('http://127.0.0.1:8001/inference/', json=post_data)
             print(tmp)
             
             return redirect('common:mypage')
