@@ -15,6 +15,18 @@ class TrainDataset(models.Model):
     def __str__(self):
         return self.dataset_name
 
+class TrainDatasetDefect(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    tds = models.ForeignKey(TrainDataset, on_delete=models.CASCADE)
+    # sort된 idx
+    ds_image_class_num = models.CharField(max_length=50)
+    # sort된 폴더명
+    ds_image_class_name = models.CharField(max_length=200)
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.ds_image_class_name
+
 class TrainDatasetImage(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     tds = models.ForeignKey(TrainDataset, on_delete=models.CASCADE)

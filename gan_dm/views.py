@@ -34,6 +34,18 @@ def index(request):
 
 @login_required(login_url='common:login')
 def train(request):
+    '''
+    train에 필요한 인자 정리
+    model_save_dir
+    data
+    cond 여부
+    fastgan_lite
+    gpus=1
+    kimg=500
+    snap=25
+    batch=16
+    
+    '''
     return redirect('gan_dm:index')
 
 @login_required(login_url='common:login')

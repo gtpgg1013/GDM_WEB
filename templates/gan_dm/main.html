@@ -12,9 +12,10 @@
       <thead>
         <tr class="thead-dark">
           <th>번호</th>
-          <th>모델이름 (데이터 생성)</th>
+          <th>모델이름</th>
           <th>알고리즘명</th>
           <th>생성일시</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -25,11 +26,12 @@
                 <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
                 {{gen_model_list.paginator.count|sub:gen_model_list.start_index|sub:forloop.counter0|add:1}}
               </td>
-              <td>
-                <a href="{% url 'gan_dm:inference' gen_model.id %}">{{ gen_model.model_name }}</a>
-              </td>
+              <td>{{ gen_model.model_name }}</td>
               <td>{{ gen_model.algorithm }}</td>
               <td>{{ gen_model.create_date }}</td>
+              <td>
+                <a class="btn btn-primary" href="{% url 'gan_dm:inference' gen_model.id %}">Data 생성</a>
+              </td>
             </tr>
           {% endfor %}
         {% else %}
@@ -77,6 +79,7 @@
       {% endif %}
     </ul>
     <!-- 페이징처리 끝 -->
-    <a href="{% url 'gan_dm:train' %}" class="btn btn-primary">모델 학습하기</a>
+    <a href="{% url 'gan_dm:train' %}" class="btn btn-info">학습 Data 등록하기</a>
+    <a href="{% url 'gan_dm:train' %}" class="btn btn-info">학습 Data List</a>
   </div>
 {% endblock %}

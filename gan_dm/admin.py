@@ -1,10 +1,13 @@
 from django.contrib import admin
-from .models import TrainDataset, TrainDatasetImage, Algorithm, GenerativeModel
+from .models import TrainDataset, TrainDatasetImage, Algorithm, GenerativeModel, TrainDatasetDefect
 from .models import ResultDataset, ResultDatasetImage, InputInferenceDataset, InputInferenceDatasetImage
 
 # Register your models here.
 class TrainDatasetAdmin(admin.ModelAdmin):
     search_fields = ['dataset_name']
+
+class TrainDatasetDefectAdmin(admin.ModelAdmin):
+    search_fields = ['ds_image_class_name']
 
 class TrainDatasetImageAdmin(admin.ModelAdmin):
     search_fields = ['ds_image_name']
@@ -29,6 +32,7 @@ class InputInferenceDatasetImageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TrainDataset, TrainDatasetAdmin)
+admin.site.register(TrainDatasetDefect, TrainDatasetDefectAdmin)
 admin.site.register(TrainDatasetImage, TrainDatasetImageAdmin)
 admin.site.register(Algorithm, AlgorithmAdmin)
 admin.site.register(GenerativeModel, GenerativeModelAdmin)
